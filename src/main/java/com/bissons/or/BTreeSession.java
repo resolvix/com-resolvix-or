@@ -77,7 +77,7 @@ public class BTreeSession extends Session
                 }
             //}
         }
-        catch (javax.jcr.RepositoryException e)
+        catch (RepositoryException e)
         {
 
         }

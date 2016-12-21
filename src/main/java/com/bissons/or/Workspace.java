@@ -11,14 +11,12 @@ package com.bissons.or;
  */
 public class Workspace
 {
-    javax.jcr.Workspace m_Workspace;
+    private javax.jcr.Workspace m_Workspace;
 
     public Workspace(
-            javax.jcr.Workspace p_Workspace
-        )
-    {
+        javax.jcr.Workspace p_Workspace
+    ) {
         m_Workspace = p_Workspace;
         return;
     }
-    
 }

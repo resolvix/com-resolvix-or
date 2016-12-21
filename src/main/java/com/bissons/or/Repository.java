@@ -17,7 +17,8 @@ import org.apache.jackrabbit.core.TransientRepository;
 public class Repository
 {
     protected InitialContext m_InitialContext;
-    protected javax.jcr.Repository m_Repository;
+
+    private javax.jcr.Repository m_Repository;
 
     public Repository()
     {

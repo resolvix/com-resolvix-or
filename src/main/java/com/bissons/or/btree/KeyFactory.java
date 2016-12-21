@@ -11,7 +11,7 @@ package com.bissons.or.btree;
  */
 public interface KeyFactory
 {
-    public Key[] create(
-            int p_nKey
-        );
+    Key[] create(
+        int p_nKey
+    );
 }

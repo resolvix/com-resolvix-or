@@ -13,7 +13,7 @@ import java.io.Externalizable;
  */
 public interface Key extends Externalizable
 {
-    public int compareTo(
-            Key p_Operand
-        );
+    int compareTo(
+        Key p_Operand
+    );
 }

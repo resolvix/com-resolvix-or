@@ -13,14 +13,12 @@ import javax.jcr.RepositoryException;
  */
 public class Session
 {
-    javax.jcr.Session m_Session;
+    private javax.jcr.Session m_Session;
 
     public Session(
-            javax.jcr.Session p_Session
-        )
-    {
+        javax.jcr.Session p_Session
+    ) {
         m_Session = p_Session;
-        return;
     }
 
 
@@ -40,9 +38,8 @@ public class Session
 
 
     public Node insertItem(
-            String p_sPath
-        )
-    {
+        String p_sPath
+    ) {
         int i, i_max;
         String[] asPath;
 
@@ -78,30 +75,22 @@ public class Session
                 }
             }
         }
-        catch (javax.jcr.RepositoryException e)
+        catch (RepositoryException e)
         {
         }
 
         return null;
     }
 
-
     public void moveItem(
-            String p_sPath_from,
-            String p_sPath_to
-        )
-    throws
-            javax.jcr.ItemExistsException,
-            javax.jcr.PathNotFoundException,
-            javax.jcr.version.VersionException,
-            javax.jcr.nodetype.ConstraintViolationException,
-            javax.jcr.RepositoryException
+        String p_sPath_from,
+        String p_sPath_to
+    ) throws javax.jcr.RepositoryException
     {
         m_Session.move(
                 p_sPath_from,
                 p_sPath_to
             );
-        return;
     }
 
     public void scratch()
