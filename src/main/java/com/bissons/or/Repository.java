@@ -23,7 +23,6 @@ public class Repository
     public Repository()
     {
         m_Repository = new TransientRepository();
-        return;
     }
 
     public Session login()
@@ -34,11 +33,9 @@ public class Repository
         try
         {
             rJcrSession = m_Repository.login();
-            if (rJcrSession != null) {
-                if (rJcrSession.isLive()) {
-                    rSession = new Session(rJcrSession);
-                    return rSession;
-                }
+            if (rJcrSession != null && rJcrSession.isLive()) {
+                rSession = new Session(rJcrSession);
+                return rSession;
             }
         }
         catch (Exception e)

@@ -66,8 +66,11 @@ public class Page
         Page p_Page,
         Key p_Key
     ) {
-        int i, i_max, r;
-        boolean bFound, bStop;
+        int i;
+        int i_max;
+        int r;
+        boolean bFound;
+        boolean bStop;
         SearchResult rSearchResult;
         i_max = p_Page.m_nKey;
         i = 0;
@@ -433,12 +436,9 @@ public class Page
         }
 
         insertX(rPage, p_Key, p_KeyFactory);
-        if (p_Page.m_pageParent == null)
-        {
-            if (p_Page.m_nKey == (p_Page.m_PageK * 2 - 1))
-            {
-                splitPage(p_Page, p_KeyFactory);
-            }
+        if (p_Page.m_pageParent == null
+            && (p_Page.m_nKey == (p_Page.m_PageK * 2 - 1))) {
+            splitPage(p_Page, p_KeyFactory);
         }
     }
 
@@ -511,7 +511,8 @@ public class Page
         Page p_ParentPage,
         Page p_RightPage
     ) {
-        int i, j;
+        int i;
+        int j;
         int parentIndex;
 
         Page parentPage;
@@ -565,7 +566,8 @@ public class Page
             KeyFactory p_KeyFactory
         )
     {
-        int i, position;
+        int i;
+        int position;
         Page rightPage;
         Page leftPage;
 

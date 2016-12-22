@@ -20,18 +20,20 @@ public class BTreeSession extends Session
         )
     {
         super(p_Session);
-        return;
     }
 
 
-    private void _findNode(
+    private void findNode(
             javax.jcr.Node p_rJcrNode,
             String p_sId
         )
     {
         boolean bFound;
 
-        long i, i_max, j, k;
+        long i;
+        long i_max;
+        long j;
+        long k;
 
         javax.jcr.Node rJcrNode;
         javax.jcr.NodeIterator rJcrNodeIterator;
@@ -45,10 +47,12 @@ public class BTreeSession extends Session
             String p_sId
         )
     {
-        javax.jcr.Node rJcrNode, rJcrNode_search;
+        javax.jcr.Node rJcrNode;
+        javax.jcr.Node rJcrNode_search;
         javax.jcr.NodeIterator rJcrNodeIterator;
         javax.jcr.Property propertySubNode;
-        String sFirstId, sLastId;
+        String sFirstId;
+        String sLastId;
 
         try
         {
@@ -70,7 +74,7 @@ public class BTreeSession extends Session
             //else
             //{
                 // p_sId is between sFirstId and sLastId
-                //rJcrNode = _findNode(rJcrNode, p_sId);
+                //rJcrNode = findNode(rJcrNode, p_sId);
                 //if (rJcrNode != null)
                 {
 

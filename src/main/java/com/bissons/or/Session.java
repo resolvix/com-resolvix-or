@@ -45,7 +45,8 @@ public class Session {
     public Node insertItem(
         String p_sPath
     ) {
-        int i, i_max;
+        int i;
+        int i_max;
         String[] asPath;
 
         javax.jcr.Node rJcrNode;
@@ -74,10 +75,8 @@ public class Session {
             }
 
             if (rJcrNode != null) {
-                if (rJcrNode != null) {
-                    rNode = new Node(rJcrNode);
-                    return rNode;
-                }
+                rNode = new Node(rJcrNode);
+                return rNode;
             }
         }
         catch (RepositoryException e)

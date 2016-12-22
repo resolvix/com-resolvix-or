@@ -106,8 +106,10 @@ public class ObjectRepositoryBalancedTreeTestRig
         long p_Seed,
         int p_Count
     ) {
-        int i, i_max;
-        long j, k;
+        int i;
+        int i_max;
+        long j;
+        long k;
         long m;
         Instruction x;
         Instruction[] ax = new Instruction[p_Count];
@@ -151,7 +153,10 @@ public class ObjectRepositoryBalancedTreeTestRig
 
     public void go(boolean p_bEnableDelete, boolean p_bTestSpecificDelete)
     {
-        int i, i_max, yy, zz;
+        int i;
+        int i_max;
+        int yy;
+        int zz;
         Instruction[] ax;
 
         LocalKeyFactory kf = new LocalKeyFactory();
