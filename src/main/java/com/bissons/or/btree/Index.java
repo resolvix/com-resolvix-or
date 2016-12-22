@@ -17,7 +17,7 @@ import java.io.ObjectOutput;
 public class Index
     implements Externalizable
 {
-    Page m_pageRoot;
+    private Page m_pageRoot;
 
     public Index(
         KeyFactory p_KeyFactory

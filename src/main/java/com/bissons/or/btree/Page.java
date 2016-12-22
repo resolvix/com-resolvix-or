@@ -17,7 +17,7 @@ import java.io.ObjectOutput;
 public class Page
     implements Externalizable
 {
-    static final int DEFAULT_PAGE_K = 256;
+    private static final int DEFAULT_PAGE_K = 256;
 
     private int m_PageK;
     private boolean m_isLeaf;
@@ -381,7 +381,7 @@ public class Page
         if (p_Page.m_isLeaf)
         {
             for (i = 0; i < i_max; i++) {
-                System.out.println(p_Prefix.toString().concat(p_Page.m_aKey[i].toString()));
+                System.out.println(p_Prefix.concat(p_Page.m_aKey[i].toString()));
             }
         }
         else
@@ -699,39 +699,33 @@ public class Page
         KeyFactory p_KeyFactory
     ) {
         insert(
-                this,
-                p_Key,
-                p_KeyFactory
-            );
-        return;
+            this,
+            p_Key,
+            p_KeyFactory
+        );
     }
 
 
     public void delete(
-                Key p_Key
-        )
-    {
+        Key p_Key
+    ) {
         deleteKey(
-                this,
-                p_Key
-            );
-        return;
+            this,
+            p_Key
+        );
     }
 
     public void dump()
     {
         dump(this, "root - ");
-        return;
     }
 
-    static void serializeNodeStructure(
+    private static void serializeNodeStructure(
             Page p_Node
         )
     {
 
-
     }
-
 
     static void checkPageIntegrity(
             Page p_Page

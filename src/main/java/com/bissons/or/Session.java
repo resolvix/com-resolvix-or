@@ -11,8 +11,7 @@ import javax.jcr.RepositoryException;
  *
  * @author rwbisson
  */
-public class Session
-{
+public class Session {
     private javax.jcr.Session m_Session;
 
     public Session(
@@ -22,8 +21,7 @@ public class Session
     }
 
 
-    public Workspace getWorkspace()
-    {
+    public Workspace getWorkspace() {
         javax.jcr.Workspace rJcrWorkspace;
         Workspace rWorkspace;
 
@@ -34,6 +32,13 @@ public class Session
         }
 
         return null;
+    }
+
+
+    public javax.jcr.Node getRootNode()
+        throws RepositoryException
+    {
+        return m_Session.getRootNode();
     }
 
 
@@ -85,12 +90,12 @@ public class Session
     public void moveItem(
         String p_sPath_from,
         String p_sPath_to
-    ) throws javax.jcr.RepositoryException
+    ) throws RepositoryException
     {
         m_Session.move(
-                p_sPath_from,
-                p_sPath_to
-            );
+            p_sPath_from,
+            p_sPath_to
+        );
     }
 
     public void scratch()

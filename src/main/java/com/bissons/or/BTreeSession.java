@@ -52,7 +52,7 @@ public class BTreeSession extends Session
 
         try
         {
-            rJcrNode = m_Session.getRootNode();
+            rJcrNode = getRootNode();
             //propertySubNode = rJcrNode.getProperty("subNodes");
             //sFirstId = propertySubNode.getValues()Value().toString();
             //sLastId = propertyLastId.getValue().toString();
