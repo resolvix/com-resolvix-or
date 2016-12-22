@@ -14,7 +14,7 @@ import java.io.ObjectOutput;
  *
  * @author rwbisson
  */
-public class Page
+public class Page<K extends Key>
     implements Externalizable
 {
     private static final int DEFAULT_PAGE_K = 256;
@@ -24,23 +24,32 @@ public class Page
     private Page m_pageParent;
     private Page[] m_apageChild;
     private int m_nKey;
-    private Key[] m_aKey;
+    private K[] m_aKey;
 
+    /**
+     *
+     * @param p_ParentPage
+     * @param p_KeyFactory
+     * @param p_PageK
+     * @param <T>
+     */
     private <T extends Key> Page(
-        Page p_ParentPage,
+        Page<K> p_ParentPage,
         KeyFactory p_KeyFactory,
         int p_PageK
     ) {
         m_PageK = p_PageK;
         m_pageParent = p_ParentPage;
         m_apageChild = new Page[m_PageK * 2];
-        m_aKey = p_KeyFactory.create(
-                m_PageK * 2 - 1
-            );
+        m_aKey = p_KeyFactory.create(m_PageK * 2 - 1);
         m_isLeaf = true;
-        return;
     }
 
+    /**
+     *
+     * @param p_ParentPage
+     * @param p_KeyFactory
+     */
     Page(
         Page p_ParentPage,
         KeyFactory p_KeyFactory
@@ -48,23 +57,37 @@ public class Page
         this(p_ParentPage, p_KeyFactory, DEFAULT_PAGE_K);
     }
 
+    /**
+     *
+     * @param p_Index
+     * @return
+     */
     public Page getPage(
-            int p_Index
-        )
-    {
+        int p_Index
+    ) {
         return m_apageChild[p_Index];
     }
 
+    /**
+     *
+     * @param p_Index
+     * @return
+     */
     public Key getKey(
-            int p_Index
-        )
-    {
+        int p_Index
+    ) {
         return m_aKey[p_Index];
     }
 
-    private static SearchResult searchKey(
-        Page p_Page,
-        Key p_Key
+    /**
+     *
+     * @param p_Page
+     * @param p_Key
+     * @return
+     */
+    private SearchResult searchKey(
+        Page<K> p_Page,
+        K p_Key
     ) {
         int i;
         int r;
@@ -208,17 +231,17 @@ public class Page
         p_Page_source.m_aKey[p_Index_source] = tmpKey;
     }
 
-    private static void deleteKey(
-        Page p_Page,
-        Key p_Key
+    private void deleteKey(
+        Page<K> p_Page,
+        K p_Key
     ) {
         int i;
         int objectIndex;
-        Page parentPage;
-        Page deletePage;
-        Page leftPage;
-        Page rightPage;
-        Page prePage;
+        Page<K> parentPage;
+        Page<K> deletePage;
+        Page<K> leftPage;
+        Page<K> rightPage;
+        Page<K> prePage;
 
         SearchResult rSearchResult;
 
@@ -370,11 +393,10 @@ public class Page
     }
 
 
-    private static void dump(
-            Page p_Page,
-            String p_Prefix
-        )
-    {
+    private void dump(
+        Page<K> p_Page,
+        String p_Prefix
+    ) {
         int i, i_max;
 
         i_max = p_Page.m_nKey;
@@ -405,9 +427,9 @@ public class Page
  *
  */
 
-    private static void insert(
-        Page p_Page,
-        Key p_Key,
+    private void insert(
+        Page<K> p_Page,
+        K p_Key,
         KeyFactory p_KeyFactory
     ) {
         int i;
@@ -437,9 +459,9 @@ public class Page
         }
     }
 
-    private static void insertX(
-        Page p_Page,
-        Key p_Key,
+    private void insertX(
+        Page<K> p_Page,
+        K p_Key,
         KeyFactory p_KeyFactory
     ) {
         int position;
@@ -500,10 +522,10 @@ public class Page
     }
 
 
-    private static void merge(
-        Page p_LeftPage,
-        Page p_ParentPage,
-        Page p_RightPage
+    private void merge(
+        Page<K> p_LeftPage,
+        Page<K> p_ParentPage,
+        Page<K> p_RightPage
     ) {
         int i;
         int j;
@@ -554,15 +576,14 @@ public class Page
     }
 
 
-    private static Page splitPage(
-            Page p_Page,
-            KeyFactory p_KeyFactory
-        )
-    {
+    private Page<K> splitPage(
+        Page<K> p_Page,
+        KeyFactory p_KeyFactory
+    ) {
         int i;
         int position;
-        Page rightPage;
-        Page leftPage;
+        Page<K> rightPage;
+        Page<K> leftPage;
 
         System.out.println("splitPage");
 
@@ -573,8 +594,8 @@ public class Page
             if (p_Page.m_pageParent == null)
             {
                 //  1.  Split algorithm for the root page.
-                leftPage = new Page(p_Page, p_KeyFactory);
-                rightPage = new Page(p_Page, p_KeyFactory);
+                leftPage = new Page<K>(p_Page, p_KeyFactory);
+                rightPage = new Page<K>(p_Page, p_KeyFactory);
 
                 System.out.println("splitPage - leftpage = ".concat(leftPage.toString()));
                 System.out.println("splitPage - rightpage = ".concat(rightPage.toString()));
@@ -690,7 +711,7 @@ public class Page
     }
 
     public void insert(
-        Key p_Key,
+        K p_Key,
         KeyFactory p_KeyFactory
     ) {
         insert(
@@ -702,7 +723,7 @@ public class Page
 
 
     public void delete(
-        Key p_Key
+        K p_Key
     ) {
         deleteKey(
             this,
@@ -715,24 +736,22 @@ public class Page
         dump(this, "root - ");
     }
 
-    public static void checkPageIntegrity(
-            Page p_Page
-        ) throws Exception
+    public void checkPageIntegrity() throws Exception
     {
         int i, i_max;
-        if (!p_Page.m_isLeaf)
+        if (!m_isLeaf)
         {
-            i_max = p_Page.m_nKey;
+            i_max = m_nKey;
             for (i = 0; i < i_max; i++) {
-                if (p_Page.m_apageChild[i].equals(p_Page.m_apageChild[i + 1])) {
-                    throw new Exception("Integrity failure (".concat(p_Page.m_apageChild[i].toString()).concat(" / ").concat(
-                            p_Page.m_apageChild[i + 1].toString()));
+                if (m_apageChild[i].equals(m_apageChild[i + 1])) {
+                    throw new Exception("Integrity failure (".concat(m_apageChild[i].toString()).concat(" / ").concat(
+                            m_apageChild[i + 1].toString()));
                 }
 
-                Page.checkPageIntegrity(p_Page.m_apageChild[i]);
+                m_apageChild[i].checkPageIntegrity();
             }
 
-            Page.checkPageIntegrity(p_Page.m_apageChild[i]);
+            m_apageChild[i].checkPageIntegrity();
         }
     }
 
