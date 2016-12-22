@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.bissons.or;
+package com.resolvix.or;
 
 
 import javax.naming.InitialContext;

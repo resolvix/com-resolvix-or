@@ -1,4 +1,4 @@
-package com.bissons.or;
+package com.resolvix.or;
 
 /*
  * To change this template, choose Tools | Templates
@@ -9,8 +9,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Random;
-import com.bissons.or.btree.Key;
-import com.bissons.or.btree.KeyFactory;
+import com.resolvix.or.btree.Key;
+import com.resolvix.or.btree.KeyFactory;
+import com.resolvix.or.btree.Index;
 import org.junit.Test;
 
 /**
@@ -160,7 +161,7 @@ public class ObjectRepositoryBalancedTreeTestRig
         Instruction[] ax;
 
         LocalKeyFactory kf = new LocalKeyFactory();
-        com.bissons.or.btree.Index index = new com.bissons.or.btree.Index(kf);
+        Index index = new Index(kf);
         
 
         //ax = _generateInstructionFeed(99, 3800000);
