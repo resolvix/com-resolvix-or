@@ -67,12 +67,10 @@ public class Page
         Key p_Key
     ) {
         int i;
-        int i_max;
         int r;
         boolean bFound;
         boolean bStop;
         SearchResult rSearchResult;
-        i_max = p_Page.m_nKey;
         i = 0;
 
         rSearchResult = null;
@@ -175,7 +173,8 @@ public class Page
         Page p_Page,
         int p_Index
     ) {
-        int i, i_max;
+        int i;
+        int i_max;
         i_max = p_Page.m_nKey;
         for (i = p_Index; i < i_max; i++) {
             p_Page.m_aKey[i] = p_Page.m_aKey[i + 1];
@@ -213,7 +212,7 @@ public class Page
         Page p_Page,
         Key p_Key
     ) {
-        int i, i_max;
+        int i;
         int objectIndex;
         Page parentPage;
         Page deletePage;
@@ -357,8 +356,6 @@ public class Page
                 prePage = prePage.m_apageChild[prePage.m_nKey];
             }
 
-            long objectId_tmp;
-
             //  Swap the leaf object, for the entry in the page.
             //objectId_tmp = prePage.m_aObjectId[prePage.m_iObject - 1];
             //prePage.m_aObjectId[prePage.m_iObject - 1] = deletePage.m_aObjectId[objectIndex];
@@ -399,8 +396,6 @@ public class Page
                 dump(p_Page.m_apageChild[i], p_Prefix.concat(" - ").concat(Integer.toString(i)).concat(" - "));
             }
         }
-
-        return;
     }
 
 
@@ -448,7 +443,6 @@ public class Page
         KeyFactory p_KeyFactory
     ) {
         int position;
-        Page leftPage;
         Page rightPage;
 
         System.out.println("insert - m_nKey = ".concat(Integer.toString(p_Page.m_nKey)));
@@ -516,7 +510,6 @@ public class Page
         int parentIndex;
 
         Page parentPage;
-        Page mergePage;
 
         System.out.println("merge");
         System.out.println(p_LeftPage.toString());
@@ -722,14 +715,7 @@ public class Page
         dump(this, "root - ");
     }
 
-    private static void serializeNodeStructure(
-            Page p_Node
-        )
-    {
-
-    }
-
-    static void checkPageIntegrity(
+    public static void checkPageIntegrity(
             Page p_Page
         ) throws Exception
     {

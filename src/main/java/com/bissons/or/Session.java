@@ -96,14 +96,4 @@ public class Session {
             p_sPath_to
         );
     }
-
-    public void scratch()
-    {
-        javax.jcr.Node rJcrNode;
-        javax.jcr.NodeIterator rJcrNodeIterator;
-        javax.jcr.Workspace rJcrWorkspace;
-
-        //rJcrNodeIterator = rJcrNode.getNodes();
-        //rJcrWorkspace.
-    }
 }
