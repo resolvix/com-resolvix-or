@@ -17,6 +17,5 @@ public class Workspace
         javax.jcr.Workspace p_Workspace
     ) {
         m_Workspace = p_Workspace;
-        return;
     }
 }

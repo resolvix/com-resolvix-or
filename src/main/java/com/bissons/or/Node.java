@@ -23,13 +23,9 @@ public class Node
     public void setProperty(
         String p_sName,
         java.io.InputStream p_InputStream
-    )throws javax.jcr.ValueFormatException,
-        javax.jcr.version.VersionException,
-        javax.jcr.lock.LockException,
-        javax.jcr.nodetype.ConstraintViolationException,
-        javax.jcr.RepositoryException
+    )throws javax.jcr.RepositoryException
     {
-        javax.jcr.Property rJcrProperty = m_Node.setProperty(
+        m_Node.setProperty(
             p_sName,
             p_InputStream
         );
