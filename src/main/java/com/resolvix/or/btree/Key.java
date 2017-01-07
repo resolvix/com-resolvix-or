@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.bissons.or.btree;
+package com.resolvix.or.btree;
 
 import java.io.Externalizable;
 
@@ -13,7 +13,7 @@ import java.io.Externalizable;
  */
 public interface Key extends Externalizable
 {
-    public int compareTo(
-            Key p_Operand
-        );
+    int compareTo(
+        Key p_Operand
+    );
 }

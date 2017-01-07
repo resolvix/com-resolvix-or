@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.bissons.or;
+package com.resolvix.or;
 
 import javax.jcr.RepositoryException;
 
@@ -11,21 +11,17 @@ import javax.jcr.RepositoryException;
  *
  * @author rwbisson
  */
-public class Session
-{
-    javax.jcr.Session m_Session;
+public class Session {
+    private javax.jcr.Session m_Session;
 
     public Session(
-            javax.jcr.Session p_Session
-        )
-    {
+        javax.jcr.Session p_Session
+    ) {
         m_Session = p_Session;
-        return;
     }
 
 
-    public Workspace getWorkspace()
-    {
+    public Workspace getWorkspace() {
         javax.jcr.Workspace rJcrWorkspace;
         Workspace rWorkspace;
 
@@ -39,11 +35,18 @@ public class Session
     }
 
 
-    public Node insertItem(
-            String p_sPath
-        )
+    public javax.jcr.Node getRootNode()
+        throws RepositoryException
     {
-        int i, i_max;
+        return m_Session.getRootNode();
+    }
+
+
+    public Node insertItem(
+        String p_sPath
+    ) {
+        int i;
+        int i_max;
         String[] asPath;
 
         javax.jcr.Node rJcrNode;
@@ -72,45 +75,25 @@ public class Session
             }
 
             if (rJcrNode != null) {
-                if (rJcrNode != null) {
-                    rNode = new Node(rJcrNode);
-                    return rNode;
-                }
+                rNode = new Node(rJcrNode);
+                return rNode;
             }
         }
-        catch (javax.jcr.RepositoryException e)
+        catch (RepositoryException e)
         {
         }
 
         return null;
     }
 
-
     public void moveItem(
-            String p_sPath_from,
-            String p_sPath_to
-        )
-    throws
-            javax.jcr.ItemExistsException,
-            javax.jcr.PathNotFoundException,
-            javax.jcr.version.VersionException,
-            javax.jcr.nodetype.ConstraintViolationException,
-            javax.jcr.RepositoryException
+        String p_sPath_from,
+        String p_sPath_to
+    ) throws RepositoryException
     {
         m_Session.move(
-                p_sPath_from,
-                p_sPath_to
-            );
-        return;
-    }
-
-    public void scratch()
-    {
-        javax.jcr.Node rJcrNode;
-        javax.jcr.NodeIterator rJcrNodeIterator;
-        javax.jcr.Workspace rJcrWorkspace;
-
-        //rJcrNodeIterator = rJcrNode.getNodes();
-        //rJcrWorkspace.
+            p_sPath_from,
+            p_sPath_to
+        );
     }
 }

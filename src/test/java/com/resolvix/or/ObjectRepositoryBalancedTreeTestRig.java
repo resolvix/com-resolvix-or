@@ -1,18 +1,17 @@
-package com.bissons.or;
+package com.resolvix.or;
 
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
-
-
-import com.bissons.or.btree.Key;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Random;
-
+import com.resolvix.or.btree.Key;
+import com.resolvix.or.btree.KeyFactory;
+import com.resolvix.or.btree.Index;
 import org.junit.Test;
 
 /**
@@ -21,27 +20,25 @@ import org.junit.Test;
  */
 public class ObjectRepositoryBalancedTreeTestRig
 {
-    private class X
-        implements com.bissons.or.btree.Key
+    private class LocalKey
+        implements Key
     {
         private long m_iValue;
 
-        public X(
-                long p_Value
-            )
-        {
+        public LocalKey(
+            long p_Value
+        ) {
             m_iValue = p_Value;
-            return;
         }
 
         public int compareTo(Key p_Operand)
         {
-            X rX;
+            LocalKey rX;
             if (p_Operand != null)
             {
-                if (p_Operand instanceof X)
+                if (p_Operand instanceof LocalKey)
                 {
-                    rX = (X) p_Operand;
+                    rX = (LocalKey) p_Operand;
                     return ((Long) m_iValue).compareTo(rX.m_iValue);
                 }
             }
@@ -72,12 +69,12 @@ public class ObjectRepositoryBalancedTreeTestRig
     }
 
 
-    private class Y
-        implements com.bissons.or.btree.KeyFactory
+    private class LocalKeyFactory
+        implements KeyFactory
     {
         public Key[] create(int p_nKey)
         {
-            return new X[p_nKey];
+            return new LocalKey[p_nKey];
         }
     }
     
@@ -93,7 +90,7 @@ public class ObjectRepositoryBalancedTreeTestRig
         Q m_Operand;
         Key m_Key;
 
-        public Instruction(
+        Instruction(
                 Long p_Id,
                 Q p_Operand,
                 Key p_Key
@@ -102,18 +99,18 @@ public class ObjectRepositoryBalancedTreeTestRig
             m_Id = p_Id;
             m_Operand = p_Operand;
             m_Key = p_Key;
-            return;
         }
     }
 
 
     private Instruction[] _generateInstructionFeed(
-            long p_Seed,
-            int p_Count
-        )
-    {
-        int i, i_max;
-        long j, k;
+        long p_Seed,
+        int p_Count
+    ) {
+        int i;
+        int i_max;
+        long j;
+        long k;
         long m;
         Instruction x;
         Instruction[] ax = new Instruction[p_Count];
@@ -135,17 +132,18 @@ public class ObjectRepositoryBalancedTreeTestRig
             switch ((int) m)
             {
                 case 0:
-                    ax[i] = new Instruction(new Long(i), Q.ADD, new X(k));
+                    ax[i] = new Instruction(new Long(i), Q.ADD, new LocalKey(k));
                     break;
 
                 case 1:
                 case -1:
-                    ax[i] = new Instruction(new Long(i), Q.DELETE, new X(k));
+                    ax[i] = new Instruction(new Long(i), Q.DELETE, new LocalKey(k));
                     break;
 
                 default:
                     System.out.println(i);
                     System.out.println(m);
+                    break;
             }
         }
 
@@ -156,11 +154,14 @@ public class ObjectRepositoryBalancedTreeTestRig
 
     public void go(boolean p_bEnableDelete, boolean p_bTestSpecificDelete)
     {
-        int i, i_max, yy, zz;
+        int i;
+        int i_max;
+        int yy;
+        int zz;
         Instruction[] ax;
 
-        Y kf = new Y();
-        com.bissons.or.btree.Index index = new com.bissons.or.btree.Index(kf);
+        LocalKeyFactory kf = new LocalKeyFactory();
+        Index index = new Index(kf);
         
 
         //ax = _generateInstructionFeed(99, 3800000);
@@ -195,6 +196,9 @@ public class ObjectRepositoryBalancedTreeTestRig
                         zz++;
                     }
                     break;
+
+                default:
+                    break;
             }
 
             try
@@ -212,35 +216,33 @@ public class ObjectRepositoryBalancedTreeTestRig
 
         if (p_bTestSpecificDelete)
         {
-            index.delete(new X(111)); // 3 instances down to 2
-            index.delete(new X(121)); // 3 instances down to 2
-            index.delete(new X(122)); // 6 instances down to 5
-            index.delete(new X(134)); // 4 instances down to 3
-            index.delete(new X(163)); // 2 instances down to 1
-            index.delete(new X(165)); // 1 instances down to 0
-            index.delete(new X(173)); // no instances; error
-            index.delete(new X(229)); // 1 instances down to 0
-            index.delete(new X(229)); // no instances; error
-            index.delete(new X(255)); // 5 instances down to 4
-            index.delete(new X(255)); // 4 instances down to 3
-            index.delete(new X(255)); // 3 instances down to 2
-            index.delete(new X(255)); // 2 instances down to 1
-            index.delete(new X(255)); // 1 instance  down to 0
-            index.delete(new X(255)); // no instances; error
-            index.delete(new X(355)); // 1 instances down to 0
-            index.delete(new X(388)); // 3 instances down to 2
-            index.delete(new X(388)); // 2 instances down to 1
-            index.delete(new X(388)); // 1 instances down to 0
-            index.delete(new X(513)); // 3 instances down to 2
-            index.delete(new X(513)); // 2 instances down to 1
-            index.delete(new X(513)); // 1 instances down to 0
-            index.delete(new X(529)); // 2 instances down to 1
-            index.delete(new X(529)); // 1 instances down to 0
+            index.delete(new LocalKey(111)); // 3 instances down to 2
+            index.delete(new LocalKey(121)); // 3 instances down to 2
+            index.delete(new LocalKey(122)); // 6 instances down to 5
+            index.delete(new LocalKey(134)); // 4 instances down to 3
+            index.delete(new LocalKey(163)); // 2 instances down to 1
+            index.delete(new LocalKey(165)); // 1 instances down to 0
+            index.delete(new LocalKey(173)); // no instances; error
+            index.delete(new LocalKey(229)); // 1 instances down to 0
+            index.delete(new LocalKey(229)); // no instances; error
+            index.delete(new LocalKey(255)); // 5 instances down to 4
+            index.delete(new LocalKey(255)); // 4 instances down to 3
+            index.delete(new LocalKey(255)); // 3 instances down to 2
+            index.delete(new LocalKey(255)); // 2 instances down to 1
+            index.delete(new LocalKey(255)); // 1 instance  down to 0
+            index.delete(new LocalKey(255)); // no instances; error
+            index.delete(new LocalKey(355)); // 1 instances down to 0
+            index.delete(new LocalKey(388)); // 3 instances down to 2
+            index.delete(new LocalKey(388)); // 2 instances down to 1
+            index.delete(new LocalKey(388)); // 1 instances down to 0
+            index.delete(new LocalKey(513)); // 3 instances down to 2
+            index.delete(new LocalKey(513)); // 2 instances down to 1
+            index.delete(new LocalKey(513)); // 1 instances down to 0
+            index.delete(new LocalKey(529)); // 2 instances down to 1
+            index.delete(new LocalKey(529)); // 1 instances down to 0
         }
 
         index.dump();
-
-        return;
     }
 
     

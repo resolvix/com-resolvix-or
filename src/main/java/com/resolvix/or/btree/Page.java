@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.bissons.or.btree;
+package com.resolvix.or.btree;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.io.ObjectOutput;
 public class Page
     implements Externalizable
 {
-    static final int DEFAULT_PAGE_K = 256;
+    private static final int DEFAULT_PAGE_K = 256;
 
     private int m_PageK;
     private boolean m_isLeaf;
@@ -26,13 +26,11 @@ public class Page
     private int m_nKey;
     private Key[] m_aKey;
 
-
-    public <T extends Key> Page(
-            Page p_ParentPage,
-            KeyFactory p_KeyFactory,
-            int p_PageK
-        )
-    {
+    private <T extends Key> Page(
+        Page p_ParentPage,
+        KeyFactory p_KeyFactory,
+        int p_PageK
+    ) {
         m_PageK = p_PageK;
         m_pageParent = p_ParentPage;
         m_apageChild = new Page[m_PageK * 2];
@@ -43,16 +41,12 @@ public class Page
         return;
     }
 
-
-    public Page(
-            Page p_ParentPage,
-            KeyFactory p_KeyFactory
-        )
-    {
+    Page(
+        Page p_ParentPage,
+        KeyFactory p_KeyFactory
+    ) {
         this(p_ParentPage, p_KeyFactory, DEFAULT_PAGE_K);
-        return;
     }
-
 
     public Page getPage(
             int p_Index
@@ -68,16 +62,15 @@ public class Page
         return m_aKey[p_Index];
     }
 
-
-    protected static SearchResult _searchKey(
-            Page p_Page,
-            Key p_Key
-        )
-    {
-        int i, i_max, r;
-        boolean bFound, bStop;
+    private static SearchResult searchKey(
+        Page p_Page,
+        Key p_Key
+    ) {
+        int i;
+        int r;
+        boolean bFound;
+        boolean bStop;
         SearchResult rSearchResult;
-        i_max = p_Page.m_nKey;
         i = 0;
 
         rSearchResult = null;
@@ -96,7 +89,7 @@ public class Page
                         if (r > 0) {
                             i++;
                         } else if (r == 0) {
-                            bFound = true;    
+                            bFound = true;
                         } else if (r < 0) {
                             bStop = true;
                         }
@@ -107,13 +100,13 @@ public class Page
                     bStop = true;
                 }
             }
-            
+
             if (bFound)
             {
                 rSearchResult = new SearchResult(
-                        p_Page,
-                        i
-                    );
+                    p_Page,
+                    i
+                );
             }
         }
         else
@@ -138,32 +131,30 @@ public class Page
                     bStop = true;
                 }
             }
-            
+
             if (bFound && !bStop)
             {
-                rSearchResult = _searchKey(
-                        p_Page.m_apageChild[i],
-                        p_Key
-                    );
+                rSearchResult = searchKey(
+                    p_Page.m_apageChild[i],
+                    p_Key
+                );
 
                 if (rSearchResult == null && p_Key.compareTo(p_Page.m_aKey[i]) == 0)
                 {
                     rSearchResult = new SearchResult(
-                            p_Page,
-                            i
-                        );
+                        p_Page,
+                        i
+                    );
                 }
             }
         }
-               
+
         return rSearchResult;
     }
 
-
-    protected void _deleteKey(
-            int p_iObjectIndex
-        )
-    {
+    private void deleteKey(
+        int p_iObjectIndex
+    ) {
         int i, i_max;
         i_max = m_nKey - 1;
         for (i = p_iObjectIndex; i < i_max; i++) {
@@ -176,16 +167,14 @@ public class Page
         m_aKey[i] = null;
         m_apageChild[i + 1] = null;
         m_nKey--;
-        return;
     }
 
-
-    static protected void _removeKey(
-            Page p_Page,
-            int p_Index
-        )
-    {
-        int i, i_max;
+    private static void removeKey(
+        Page p_Page,
+        int p_Index
+    ) {
+        int i;
+        int i_max;
         i_max = p_Page.m_nKey;
         for (i = p_Index; i < i_max; i++) {
             p_Page.m_aKey[i] = p_Page.m_aKey[i + 1];
@@ -195,44 +184,35 @@ public class Page
         p_Page.m_aKey[i] = null;
         p_Page.m_apageChild[i + 1] = null;
         p_Page.m_nKey--;
-
-        return;
     }
 
 
-    static protected void _moveKey(
-            Page p_Page_source,
-            int p_Index_source,
-            Page p_Page_target,
-            int p_Index_target
-        )
-    {
+    private static void moveKey(
+        Page p_Page_source,
+        int p_Index_source,
+        Page p_Page_target,
+        int p_Index_target
+    ) {
         p_Page_target.m_aKey[p_Index_target] = p_Page_source.m_aKey[p_Index_source];
-        return;
     }
 
-
-    static protected void _swapKey(
-            Page p_Page_source,
-            int p_Index_source,
-            Page p_Page_target,
-            int p_Index_target
-        )
-    {
+    private static void swapKey(
+        Page p_Page_source,
+        int p_Index_source,
+        Page p_Page_target,
+        int p_Index_target
+    ) {
         Key tmpKey;
         tmpKey = p_Page_target.m_aKey[p_Index_target];
         p_Page_target.m_aKey[p_Index_target] = p_Page_source.m_aKey[p_Index_source];
         p_Page_source.m_aKey[p_Index_source] = tmpKey;
-        return;
     }
 
-
-    static protected void _delete(
-            Page p_Page,
-            Key p_Key
-        )
-    {
-        int i, i_max;
+    private static void deleteKey(
+        Page p_Page,
+        Key p_Key
+    ) {
+        int i;
         int objectIndex;
         Page parentPage;
         Page deletePage;
@@ -242,25 +222,25 @@ public class Page
 
         SearchResult rSearchResult;
 
-        System.out.println("_delete - m_nKey = ".concat(Integer.toString(p_Page.m_nKey)).concat(", ").concat(p_Key.toString()));
+        System.out.println("deleteKey - m_nKey = ".concat(Integer.toString(p_Page.m_nKey)).concat(", ").concat(p_Key.toString()));
 
         if (p_Key.toString().compareTo("255") == 0) {
             System.out.println("stop");
         }
 
-        rSearchResult = _searchKey(
+        rSearchResult = searchKey(
                 p_Page,
                 p_Key
             );
 
         if (rSearchResult == null) {
-            System.out.println("_delete::rSearchResult == null");
+            System.out.println("deleteKey::rSearchResult == null");
             return;
         }
 
         deletePage = rSearchResult.getPage();
         if (deletePage == null) {
-            System.out.println("_delete::deletePage == null");
+            System.out.println("deleteKey::deletePage == null");
             return;
         }
 
@@ -278,7 +258,7 @@ public class Page
             //      page deleted.
             if (deletePage.m_nKey > (deletePage.m_PageK - 1))
             {
-                deletePage._deleteKey(objectIndex);
+                deletePage.deleteKey(objectIndex);
             }
             else
             {
@@ -311,15 +291,15 @@ public class Page
                         //              left page.
                         if (leftPage.m_nKey > (leftPage.m_PageK - 1))
                         {
-                            _moveKey(parentPage, i, deletePage, objectIndex);
-                            _moveKey(leftPage, leftPage.m_nKey - 1, parentPage, i);
+                            moveKey(parentPage, i, deletePage, objectIndex);
+                            moveKey(leftPage, leftPage.m_nKey - 1, parentPage, i);
                             //deletePage.m_aObjectId[objectIndex] = parentPage.m_aObjectId[i];
                             //parentPage.m_aObjectId[i] = leftPage.m_aObjectId[leftPage.m_iObject - 1];
-                            _delete(leftPage, leftPage.m_aKey[leftPage.m_nKey - 1]);
+                            deleteKey(leftPage, leftPage.m_aKey[leftPage.m_nKey - 1]);
                         }
                         else
                         {
-                            _merge(leftPage, parentPage, deletePage);
+                            merge(leftPage, parentPage, deletePage);
                         }
                     }
                     else
@@ -348,16 +328,16 @@ public class Page
                         //              right page.
                         if (rightPage.m_nKey > rightPage.m_PageK - 1)
                         {
-                            _moveKey(parentPage, i, deletePage, objectIndex);
-                            _moveKey(rightPage, 0, parentPage, i);
+                            moveKey(parentPage, i, deletePage, objectIndex);
+                            moveKey(rightPage, 0, parentPage, i);
 
                             //deletePage.m_aObjectId[objectIndex] = parentPage.m_aObjectId[i];
                             //parentPage.m_aObjectId[i] = rightPage.m_aObjectId[0];
-                            _delete(rightPage, rightPage.m_aKey[0]);
+                            deleteKey(rightPage, rightPage.m_aKey[0]);
                         }
                         else
                         {
-                            _merge(deletePage, parentPage, rightPage);
+                            merge(deletePage, parentPage, rightPage);
                         }
                     }
                 }
@@ -376,23 +356,21 @@ public class Page
                 prePage = prePage.m_apageChild[prePage.m_nKey];
             }
 
-            long objectId_tmp;
-
             //  Swap the leaf object, for the entry in the page.
             //objectId_tmp = prePage.m_aObjectId[prePage.m_iObject - 1];
             //prePage.m_aObjectId[prePage.m_iObject - 1] = deletePage.m_aObjectId[objectIndex];
             //deletePage.m_aObjectId[objectIndex] = objectId_tmp;
-            _swapKey(deletePage, objectIndex, prePage, prePage.m_nKey - 1);
+            swapKey(deletePage, objectIndex, prePage, prePage.m_nKey - 1);
 
             //  Delete the object from the leaf node.
-            _delete(prePage, prePage.m_aKey[prePage.m_nKey - 1]);
+            deleteKey(prePage, prePage.m_aKey[prePage.m_nKey - 1]);
         }
 
-        System.out.println("_delete(2) - m_nKey = ".concat(Integer.toString(p_Page.m_nKey)));
+        System.out.println("deleteKey(2) - m_nKey = ".concat(Integer.toString(p_Page.m_nKey)));
     }
 
 
-    static protected void _dump(
+    private static void dump(
             Page p_Page,
             String p_Prefix
         )
@@ -403,7 +381,7 @@ public class Page
         if (p_Page.m_isLeaf)
         {
             for (i = 0; i < i_max; i++) {
-                System.out.println(p_Prefix.toString().concat(p_Page.m_aKey[i].toString()));
+                System.out.println(p_Prefix.concat(p_Page.m_aKey[i].toString()));
             }
         }
         else
@@ -412,14 +390,12 @@ public class Page
             {
                 for (i = 0; i < i_max; i++)
                 {
-                    _dump(p_Page.m_apageChild[i], p_Prefix.concat(" - ").concat(Integer.toString(i)).concat(" - "));
+                    dump(p_Page.m_apageChild[i], p_Prefix.concat(" - ").concat(Integer.toString(i)).concat(" - "));
                     System.out.println(p_Page.m_aKey[i].toString());
                 }
-                _dump(p_Page.m_apageChild[i], p_Prefix.concat(" - ").concat(Integer.toString(i)).concat(" - "));
+                dump(p_Page.m_apageChild[i], p_Prefix.concat(" - ").concat(Integer.toString(i)).concat(" - "));
             }
         }
-
-        return;
     }
 
 
@@ -429,12 +405,11 @@ public class Page
  *
  */
 
-    static protected void _insert(
-            Page p_Page,
-            Key p_Key,
-            KeyFactory p_KeyFactory
-        )
-    {
+    private static void insert(
+        Page p_Page,
+        Key p_Key,
+        KeyFactory p_KeyFactory
+    ) {
         int i;
         boolean bFound;
         Page rPage;
@@ -455,31 +430,22 @@ public class Page
             rPage = rPage.m_apageChild[i];
         }
 
-        _insertX(rPage, p_Key, p_KeyFactory);
-        if (p_Page.m_pageParent == null)
-        {
-            if (p_Page.m_nKey == (p_Page.m_PageK * 2 - 1))
-            {
-                _split(p_Page, p_KeyFactory);
-            }
+        insertX(rPage, p_Key, p_KeyFactory);
+        if (p_Page.m_pageParent == null
+            && (p_Page.m_nKey == (p_Page.m_PageK * 2 - 1))) {
+            splitPage(p_Page, p_KeyFactory);
         }
-
-        return;
     }
 
-
-
-    static protected void _insertX(
-            Page p_Page,
-            Key p_Key,
-            KeyFactory p_KeyFactory
-        )
-    {
+    private static void insertX(
+        Page p_Page,
+        Key p_Key,
+        KeyFactory p_KeyFactory
+    ) {
         int position;
-        Page leftPage;
         Page rightPage;
 
-        System.out.println("_insert - m_nKey = ".concat(Integer.toString(p_Page.m_nKey)));
+        System.out.println("insert - m_nKey = ".concat(Integer.toString(p_Page.m_nKey)));
         if (p_Page.m_nKey == 23) {
             System.out.println("XXX");
         }
@@ -500,16 +466,16 @@ public class Page
 
             if (p_Page.m_nKey == (p_Page.m_PageK * 2 - 1))
             {
-                rightPage = _split(p_Page, p_KeyFactory);
+                rightPage = splitPage(p_Page, p_KeyFactory);
                 if (position > (p_Page.m_PageK - 1))
                 {
-                    _insert(rightPage, p_Key, p_KeyFactory);
+                    insert(rightPage, p_Key, p_KeyFactory);
                 }
                 else
                 {
                     if (position != p_Page.m_nKey)
                     {
-                        _shift(p_Page, position);
+                        shiftKeysWithinPage(p_Page, position);
                     }
                     else
                     {
@@ -522,7 +488,7 @@ public class Page
             {
                 if (position != p_Page.m_nKey)
                 {
-                    _shift(p_Page, position);
+                    shiftKeysWithinPage(p_Page, position);
                 }
                 else
                 {
@@ -534,19 +500,18 @@ public class Page
     }
 
 
-    static protected void _merge(
-            Page p_LeftPage,
-            Page p_ParentPage,
-            Page p_RightPage
-        )
-    {
-        int i, j;
+    private static void merge(
+        Page p_LeftPage,
+        Page p_ParentPage,
+        Page p_RightPage
+    ) {
+        int i;
+        int j;
         int parentIndex;
 
         Page parentPage;
-        Page mergePage;
 
-        System.out.println("_merge");
+        System.out.println("merge");
         System.out.println(p_LeftPage.toString());
         System.out.println(p_RightPage.toString());
 
@@ -566,23 +531,19 @@ public class Page
         }
 
         //  Remove the right hand page from the parent page.
-        _removeKey(
+        removeKey(
                 p_ParentPage,
                 parentIndex
             );
-
-        return;
     }
 
 
-    static protected void _shift(
-            Page p_Page,
-            int p_iStartPosition
-        )
-    {
+    private static void shiftKeysWithinPage(
+        Page p_Page,
+        int p_iStartPosition
+    ) {
         int i;
-        for (i = p_Page.m_nKey; i > p_iStartPosition; i--)
-        {
+        for (i = p_Page.m_nKey; i > p_iStartPosition; i--) {
             p_Page.m_aKey[i] = p_Page.m_aKey[i - 1];
             if (!p_Page.m_isLeaf) {
                 p_Page.m_apageChild[i + 1] = p_Page.m_apageChild[i];
@@ -590,20 +551,20 @@ public class Page
         }
 
         p_Page.m_nKey++;
-        return;
     }
 
 
-    static protected Page _split(
+    private static Page splitPage(
             Page p_Page,
             KeyFactory p_KeyFactory
         )
     {
-        int i, position;
+        int i;
+        int position;
         Page rightPage;
         Page leftPage;
 
-        System.out.println("_split");
+        System.out.println("splitPage");
 
         if (p_Page.m_nKey == (p_Page.m_PageK * 2 - 1))
         {
@@ -615,8 +576,8 @@ public class Page
                 leftPage = new Page(p_Page, p_KeyFactory);
                 rightPage = new Page(p_Page, p_KeyFactory);
 
-                System.out.println("_split - leftpage = ".concat(leftPage.toString()));
-                System.out.println("_split - rightpage = ".concat(rightPage.toString()));
+                System.out.println("splitPage - leftpage = ".concat(leftPage.toString()));
+                System.out.println("splitPage - rightpage = ".concat(rightPage.toString()));
 
                 for (i = 0; i < p_Page.m_PageK - 1; i++) {
                     leftPage.m_aKey[i] = p_Page.m_aKey[i];
@@ -657,11 +618,11 @@ public class Page
             {
                 //  2.  Split algorithm for non-root page.
                 if (p_Page.m_pageParent.m_nKey == (p_Page.m_PageK * 2 - 1)) {
-                    _split(p_Page.m_pageParent, p_KeyFactory);
+                    splitPage(p_Page.m_pageParent, p_KeyFactory);
                 }
 
                 //  2.1 Iterate through the parent page to locate the position
-                //      at which the new page to be created by this _split()
+                //      at which the new page to be created by this splitPage()
                 //      operation should be recorded.
                 position = 0;
                 /*while ((position < p_Page.m_pageParent.m_nKey)
@@ -675,19 +636,19 @@ public class Page
 
                 //  2.2 Shift the entries in the parent page to accomodate
                 //      the new page reference.
-                _shift(p_Page.m_pageParent, position);
+                shiftKeysWithinPage(p_Page.m_pageParent, position);
 
                 //  2.3 Move the object identifier at the centre point of the
                 //      page being split to the newly created position in the
                 //      parent page.
-                _moveKey(p_Page, p_Page.m_PageK - 1, p_Page.m_pageParent, position);
+                moveKey(p_Page, p_Page.m_PageK - 1, p_Page.m_pageParent, position);
                 //p_Page.m_pageParent.m_aObjectId[position] = p_Page.m_aObjectId[pageK - 1];
 
                 //  2.4 Create a new page to subsist to the right of the page
                 //      being split, and populate the new page with content
                 //      from the page being split.
                 rightPage = new Page(p_Page.m_pageParent, p_KeyFactory);
-                System.out.println("_split - rightpage = ".concat(rightPage.toString()));
+                System.out.println("splitPage - rightpage = ".concat(rightPage.toString()));
                 for (i = 0; i < p_Page.m_PageK - 1; i++) {
                     rightPage.m_aKey[i] = p_Page.m_aKey[p_Page.m_PageK + i];
                 }
@@ -729,47 +690,32 @@ public class Page
     }
 
     public void insert(
-            Key p_Key,
-            KeyFactory p_KeyFactory
-        )
-    {
-        _insert(
-                this,
-                p_Key,
-                p_KeyFactory
-            );
-        return;
+        Key p_Key,
+        KeyFactory p_KeyFactory
+    ) {
+        insert(
+            this,
+            p_Key,
+            p_KeyFactory
+        );
     }
 
 
     public void delete(
-                Key p_Key
-        )
-    {
-        _delete(
-                this,
-                p_Key
-            );
-        return;
+        Key p_Key
+    ) {
+        deleteKey(
+            this,
+            p_Key
+        );
     }
 
     public void dump()
     {
-        _dump(this, "root - ");
-        return;
+        dump(this, "root - ");
     }
 
-    static void serializeNodeStructure(
-            Page p_Node
-        )
-    {
-        
-
-
-    }
-
-
-    static void _checkIntegrity(
+    public static void checkPageIntegrity(
             Page p_Page
         ) throws Exception
     {
@@ -783,13 +729,11 @@ public class Page
                             p_Page.m_apageChild[i + 1].toString()));
                 }
 
-                Page._checkIntegrity(p_Page.m_apageChild[i]);
+                Page.checkPageIntegrity(p_Page.m_apageChild[i]);
             }
 
-            Page._checkIntegrity(p_Page.m_apageChild[i]);
+            Page.checkPageIntegrity(p_Page.m_apageChild[i]);
         }
-        
-        return;
     }
 
 

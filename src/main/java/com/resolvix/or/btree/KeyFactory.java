@@ -3,7 +3,7 @@
  * and open the template in the editor.
  */
 
-package com.bissons.or.btree;
+package com.resolvix.or.btree;
 
 /**
  *
@@ -11,7 +11,7 @@ package com.bissons.or.btree;
  */
 public interface KeyFactory
 {
-    public Key[] create(
-            int p_nKey
-        );
+    Key[] create(
+        int p_nKey
+    );
 }
